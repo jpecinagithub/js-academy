@@ -113,12 +113,12 @@ export function Playground() {
             </div>
           </div>
         </div>
-        <div>
-          <div className="panel">
+        <div className="pg-console">
+          <div className="panel pg-console-panel">
             <div className="panel-head">
               <span className="lamp" aria-hidden="true" /> {t("playground.consoleTitle")}
             </div>
-            <div style={{ padding: 12, display: "grid", gap: 12 }}>
+            <div className="pg-console-body">
               {timedOut && <p style={{ color: "var(--amber)", margin: 0 }}>⚠ {t("labs.timedOut")}</p>}
               <Console lines={lines} />
               <button type="button" className="btn btn-ghost btn-sm" onClick={clear} style={{ justifySelf: "start" }}>

@@ -83,19 +83,23 @@ const SRCDOC = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body><s
       done();
       return;
     }
-    // If user code returns a promise (async run), wait for it before
-    // reporting completion — enables async tests (the watchdog still guards).
+    // Give the event loop a grace period before reporting completion:
+    // pending microtasks (promises) and short timers (setTimeout) get a
+    // chance to run, so async examples show their output instead of being
+    // cut off the moment the synchronous code finishes. The outer watchdog
+    // still bounds the total run time.
+    function settle() { setTimeout(done, 450); }
     if (ret && typeof ret.then === "function") {
       ret.then(
         function (v) {
           if (typeof v !== "undefined") send("return", "→ " + fmt(v), "return");
-          done();
+          settle();
         },
-        function (err) { fail(err); done(); }
+        function (err) { fail(err); settle(); }
       );
     } else {
       if (typeof ret !== "undefined") send("return", "→ " + fmt(ret), "return");
-      done();
+      settle();
     }
   });
 
