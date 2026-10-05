@@ -56,6 +56,7 @@ export function Quiz({ quiz, best, onFinish }) {
                 const isAnswer = j === q.answer;
                 const cls =
                   "quiz-opt" +
+                  (chosen === j && !checked ? " selected" : "") +
                   (checked && isAnswer ? " correct" : "") +
                   (checked && chosen === j && !isAnswer ? " wrong" : "");
                 return (
