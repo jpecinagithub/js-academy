@@ -23,15 +23,14 @@ function RunnableCode({ code, caption, label }) {
 
   return (
     <div style={{ margin: "16px 0" }}>
-      <CodeBlock code={code} caption={caption} runnable onRun={doRun} />
-      <div className="lab-controls">
-        <button type="button" className="btn btn-sm btn-primary" onClick={doRun} disabled={running}>
-          {running ? t("labs.running") : `▶ ${t("labs.run")}`}
-        </button>
-        <button type="button" className="btn btn-sm btn-ghost" onClick={clear}>
-          {t("labs.clear")}
-        </button>
-      </div>
+      <CodeBlock
+        code={code}
+        caption={caption}
+        runnable
+        onRun={doRun}
+        onClear={clear}
+        running={running}
+      />
       {timedOut && <p style={{ color: "var(--amber)" }}>⚠ {t("labs.timedOut")}</p>}
       {(hasRun || lines.length > 0) && <Console lines={lines} />}
       <p style={{ fontSize: "0.8rem", color: "var(--faint)", marginTop: 8 }}>🔒 {t("lesson.sandboxNote")}</p>

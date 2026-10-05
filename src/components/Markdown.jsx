@@ -87,7 +87,8 @@ function inline(text) {
 }
 
 /** Static code block with copy button and optional "run in sandbox" hook. */
-export function CodeBlock({ code, caption, onRun, runnable }) {
+/** When runnable, the header shows Run + Clear (no copy button, no duplicated controls below). */
+export function CodeBlock({ code, caption, onRun, onClear, runnable, running }) {
   const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
@@ -106,18 +107,34 @@ export function CodeBlock({ code, caption, onRun, runnable }) {
       <div className="code-block">
         <div className="code-actions">
           {runnable && (
-            <button type="button" className="btn btn-sm btn-primary" onClick={() => onRun && onRun(code)}>
-              ▶ {t("labs.run")}
+            <button
+              type="button"
+              className="btn btn-sm btn-primary"
+              onClick={() => onRun && onRun(code)}
+              disabled={running}
+            >
+              {running ? t("labs.running") : `▶ ${t("labs.run")}`}
             </button>
           )}
-          <button
-            type="button"
-            className="btn btn-sm btn-secondary"
-            onClick={copy}
-            aria-label={t("labs.copy")}
-          >
-            {copied ? t("labs.copied") : t("labs.copy")}
-          </button>
+          {runnable ? (
+            <button
+              type="button"
+              className="btn btn-sm btn-secondary"
+              onClick={() => onClear && onClear()}
+              aria-label={t("labs.clear")}
+            >
+              {t("labs.clear")}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-sm btn-secondary"
+              onClick={copy}
+              aria-label={t("labs.copy")}
+            >
+              {copied ? t("labs.copied") : t("labs.copy")}
+            </button>
+          )}
         </div>
         <pre>
           <HighlightedCode code={code} />
